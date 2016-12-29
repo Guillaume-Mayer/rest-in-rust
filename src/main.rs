@@ -7,6 +7,7 @@ use iron::mime::Mime;
 use router::Router;
 use std::error::Error;
 use std::env;
+use std::net::{Ipv4Addr, SocketAddrV4};
 
 fn main() {
 
@@ -31,7 +32,7 @@ fn main() {
     }
 
     // Server
-    match Iron::new(router).http(("localhost", port)) {
+    match Iron::new(router).http(SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), port)) {
         Ok(_) => println!("Listening on {}", port),
         Err(e) => println!("Error: {}", e.description()),
     };
