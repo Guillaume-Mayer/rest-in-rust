@@ -12,18 +12,22 @@ fn main() {
 
     // Get port from args
     let mut args = env::args();
-    args.next(); // First arg is app path
+    args.next();
     let port : u16 = args.next().unwrap_or(String::from("3000")).parse().unwrap_or(3000);
     
     // Routes
     let mut router = Router::new();
     router.get("/hello/:name", hello, "hello");
+    router.get("/version", version, "version");
 
     // Handlers
     fn hello(req: &mut Request) -> IronResult<Response> {
-        let ref name = req.extensions.get::<Router>().unwrap().find("name").unwrap_or("/");
+        let ref name = req.extensions.get::<Router>().unwrap().find("name").unwrap();
         let content_type : Mime = "application/json".parse().unwrap();
         Ok(Response::with((content_type, status::Ok, format!("{{\"response\":\"Hello {}!\"}}", name))))
+    }
+    fn version(_: &mut Request) -> IronResult<Response> {
+        Ok(Response::with(("v0.1.0",status::Ok)))
     }
 
     // Server
