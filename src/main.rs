@@ -12,10 +12,9 @@ fn main() {
 
     // Get port from args
     let mut args = env::args();
-    args.next();
+    args.next(); // First arg is app path
     let port : u16 = args.next().unwrap_or(String::from("3000")).parse().unwrap_or(3000);
-    println!("Port: {}", port);
-
+    
     // Routes
     let mut router = Router::new();
     router.get("/hello/:name", hello, "hello");
